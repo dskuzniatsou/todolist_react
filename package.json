@@ -7,9 +7,12 @@
     "dev": "vite --port 3000",
     "build": "tsc -b && vite build",
     "test": "vitest",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "gh-pages -d dist",
+    "predeploy": "pnpm run build"
   },
   "dependencies": {
+    "gh-pages": "^6.3.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "uuid": "^11.1.0"
