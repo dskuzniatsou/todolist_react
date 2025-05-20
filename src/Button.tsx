@@ -1,11 +1,12 @@
 type Props ={
         title: string
     onClickHandler?: () => void
+    filterClassName?: string
 }
 
-export const Button = ({title, onClickHandler}:Props) => {
+export const Button = ({title, onClickHandler, filterClassName}:Props) => {
     return (
-        <button onClick={onClickHandler}>{title}</button>
+        <button className={filterClassName} onClick={onClickHandler}>{title}</button>
     );
 };
 
