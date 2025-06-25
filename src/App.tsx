@@ -2,6 +2,7 @@ import './App.css'
 import {TodolistItem} from "./TodolistItem.tsx";
 import {useState} from "react";
 import {v1} from "uuid";
+import CreateItemForm from "./CreateItemForm.tsx";
 
 export type TasksState = {
   [key: string]: Task[]
@@ -64,29 +65,33 @@ export const App = () =>  {
     const newTasks = { ...tasks, [todolistId]: [newTask, ...tasks[todolistId]] }
     setTasks(newTasks)
   }
-  const changeStatus = (todolistId: string, taskId: string, isDone: boolean) => {
-    const newTasks = {
-      ...tasks,
-      [todolistId]: tasks[todolistId].map(task => task.id === taskId ? { ...task, isDone } : task),
-    }
-    setTasks(newTasks)
+
+  const changeTaskStatus = (todolistId: string, taskId: string, isDone: boolean) => {
+    setTasks({...tasks, [todolistId]: tasks[todolistId].map(task => task.id == taskId ? { ...task, isDone } : task)})
   }
-  // const changeStatus = (taskId: string, isDone: boolean)=>{
-  //   let task= tasks.find(t=> t.id===taskId);
-  //   if (task) {
-  //     task.isDone = isDone;
-  //   }
-  //
-  //   setTasks([...tasks])
-  // }
+
   const deleteTodolist = (todolistId: string) => {
     setTodolists(todolists.filter(todolist => todolist.id !== todolistId))
     delete tasks[todolistId]
     setTasks({ ...tasks })
   }
+  const createTodolist = (title: string) => {
+    const todolistId = v1()
+    const newTodolist: Todolist = {id: todolistId, title, filter: 'all'}
+    setTodolists([newTodolist, ...todolists])
+    setTasks({ ...tasks, [todolistId]: [] })
+  }
+
+  const  changeTaskTitle = (todolistId: string, taskId: string, title:string) => {
+    setTasks({...tasks, [todolistId]: tasks[todolistId].map(task => task.id===taskId ? {...task,title}: task)})
+  }
+  const changeTodolistTitle = (todolistId:string, title:string) => {
+    setTodolists(todolists.map(todolist => todolist.id===todolistId? { ...todolist, title } : todolist))
+  }
 
 return (
       <div className="app">
+        <CreateItemForm createItem={createTodolist}/>
         {todolists.map(todolist => {
           const todolistTasks = tasks[todolist.id]
           let filteredTasks = todolistTasks
@@ -103,8 +108,10 @@ return (
                             deleteTask={deleteTask}
                             changeFilter={changeFilter}
                             createTask={createTask}
-                            changeStatus={changeStatus}
+                            changeTaskStatus={changeTaskStatus}
                             deleteTodolist={deleteTodolist}
+                            changeTaskTitle={changeTaskTitle}
+                            changeTodolistTitle={changeTodolistTitle}
               />
           )
         })}
