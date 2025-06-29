@@ -1,5 +1,5 @@
 import {Todolist, TypeFilters} from "../App.tsx";
-import {v1} from "uuid";
+
 
 const initialState: Todolist[] = []
 
@@ -43,12 +43,12 @@ export const DeleteTodolistAC = (id: string) => {
         }
     } as const
 }
-export const createTodolistAC = (title: string) => {
+export const createTodolistAC = (title: string, id:string) => {
     return {
         type: "create_todolist",
         payload: {
             title,
-            id: v1() // можно поменять на {title}
+            id // можно поменять на {title}
         },
     } as const
 }
